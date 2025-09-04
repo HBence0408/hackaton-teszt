@@ -1,4 +1,6 @@
+# ===============================
 # Backend Service
+# ===============================
 apiVersion: v1
 kind: Service
 metadata:
@@ -8,13 +10,15 @@ spec:
     app: backend
   ports:
     - protocol: TCP
-      port: 8080          # belső port a podon
-      targetPort: 8080
-  type: ClusterIP        # csak a klaszteren belül érhető el
+      port: 8080          # service port (belső)
+      targetPort: 8080    # pod port
+  type: ClusterIP        # csak klaszteren belül érhető el
 
 ---
 
+# ===============================
 # Frontend Service
+# ===============================
 apiVersion: v1
 kind: Service
 metadata:
@@ -24,6 +28,7 @@ spec:
     app: frontend
   ports:
     - protocol: TCP
-      port: 80            # külső port, amin elérhető lesz a frontend
-      targetPort: 80
-  type: NodePort          # kívülről is elérhető a Node IP + port segítségével
+      port: 80            # service port (belső)
+      targetPort: 80      # pod port
+      nodePort: 30828     # fix NodePort kívülről való eléréshez
+  type: NodePort          # kívülről is elérhető a Node IP + NodePort segítségével
