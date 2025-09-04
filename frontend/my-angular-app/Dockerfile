@@ -21,7 +21,7 @@ COPY . .
 
 # Angular production build
 # ⚠️ Ellenőrizd az angular.json outputPath értékét!
-RUN ng build --configuration production
+RUN ng build -c production --output-hashing=all
 
 # --------------------------
 # 2️⃣ Nginx stage
