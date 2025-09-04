@@ -10,10 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # 1️⃣ Checkout repository
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Setup kubeconfig
+    # 2️⃣ Setup kubeconfig
     - name: Setup kubeconfig
       run: |
         mkdir -p $HOME/.kube
@@ -21,41 +22,49 @@ jobs:
         ${{ secrets.KUBECONFIG_DATA }}
         EOF
 
-    # Install Node.js (a frontend buildhez)
+    # 3️⃣ Install Docker
+    - name: Setup Docker
+      uses: docker/setup-buildx-action@v3
+
+    # 4️⃣ Setup Node.js (frontend build)
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '20'
 
-    # Install Angular CLI
+    # 5️⃣ Install Angular CLI
     - name: Install Angular CLI
       run: npm install -g @angular/cli
 
-    # Build frontend
+    # 6️⃣ Build Angular frontend
     - name: Build Angular frontend
       working-directory: ./frontend/my-angular-app
       run: npm ci && ng build --configuration production
 
-    # Backend Docker build és deploy Kaniko-val
+    # 7️⃣ Build backend Docker image with Kaniko
     - name: Build backend image with Kaniko
-      uses: gcr.io/kaniko-project/executor:latest
-      with:
-        args: >
-          --context ./backend
-          --dockerfile ./backend/Dockerfile
-          --destination myapp-backend:latest
+      run: |
+        docker run \
+          -v $HOME/.kube:/root/.kube \
+          -v $PWD/backend:/workspace \
+          gcr.io/kaniko-project/executor:latest \
+          --dockerfile=/workspace/Dockerfile \
+          --context=/workspace \
+          --destination=myapp-backend:latest \
           --insecure
 
-    # Frontend Docker build és deploy Kaniko-val
+    # 8️⃣ Build frontend Docker image with Kaniko
     - name: Build frontend image with Kaniko
-      uses: gcr.io/kaniko-project/executor:latest
-      with:
-        args: >
-          --context ./frontend
-          --dockerfile ./frontend/Dockerfile
-          --destination myapp-frontend:latest
+      run: |
+        docker run \
+          -v $HOME/.kube:/root/.kube \
+          -v $PWD/frontend:/workspace \
+          gcr.io/kaniko-project/executor:latest \
+          --dockerfile=/workspace/Dockerfile \
+          --context=/workspace \
+          --destination=myapp-frontend:latest \
           --insecure
 
-    # Apply Kubernetes manifests
+    # 9️⃣ Deploy to Kubernetes
     - name: Deploy to Kubernetes
       run: kubectl apply -f k8s/
