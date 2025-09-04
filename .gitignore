@@ -1,0 +1,85 @@
+# -------------------------
+# Node.js (backend)
+# -------------------------
+backend/node_modules/
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+backend/pnpm-debug.log*
+backend/package-lock.json
+backend/pnpm-lock.yaml
+backend/yarn.lock
+backend/dist/
+backend/build/
+backend/logs/
+backend/*.log
+backend/.env
+backend/.env.*
+
+# -------------------------
+# Angular (frontend)
+# -------------------------
+frontend/node_modules/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/package-lock.json
+frontend/pnpm-lock.yaml
+frontend/yarn.lock
+frontend/dist/
+frontend/out-tsc/
+frontend/.angular/
+frontend/.env
+frontend/.env.*
+
+# -------------------------
+# Kubernetes & Docker
+# -------------------------
+*.kubeconfig
+*.kube/
+.kube/
+*.pid
+*.seed
+docker-compose.override.yml
+
+# -------------------------
+# General build/test
+# -------------------------
+coverage/
+.nyc_output/
+.jest/
+tmp/
+temp/
+*.tmp
+*.bak
+
+# -------------------------
+# Logs
+# -------------------------
+logs/
+*.log
+npm-debug.log*
+debug.log*
+error.log*
+
+# -------------------------
+# IDE/Editor
+# -------------------------
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+
+# -------------------------
+# OS
+# -------------------------
+.DS_Store
+Thumbs.db
+
+# -------------------------
+# GitHub Actions
+# -------------------------
+.github/workflows/*.bak
+.github/workflows/*.tmp
