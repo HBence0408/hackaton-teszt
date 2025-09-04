@@ -14,7 +14,7 @@ RUN npm ci
 RUN npm install -g @angular/cli
 
 #angular matarial hozzáadás
-RUN  ng add @angular/material
+RUN npm install @angular/material @angular/cdk @angular/animations
 
 # Teljes frontend forrás másolása
 COPY . .
