@@ -1,0 +1,61 @@
+name: CI/CD Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Setup kubeconfig
+    - name: Setup kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        cat <<EOF > $HOME/.kube/config
+        ${{ secrets.KUBECONFIG_DATA }}
+        EOF
+
+    # Install Node.js (a frontend buildhez)
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    # Install Angular CLI
+    - name: Install Angular CLI
+      run: npm install -g @angular/cli
+
+    # Build frontend
+    - name: Build Angular frontend
+      working-directory: ./frontend/my-angular-app
+      run: npm ci && ng build --configuration production
+
+    # Backend Docker build és deploy Kaniko-val
+    - name: Build backend image with Kaniko
+      uses: gcr.io/kaniko-project/executor:latest
+      with:
+        args: >
+          --context ./backend
+          --dockerfile ./backend/Dockerfile
+          --destination myapp-backend:latest
+          --insecure
+
+    # Frontend Docker build és deploy Kaniko-val
+    - name: Build frontend image with Kaniko
+      uses: gcr.io/kaniko-project/executor:latest
+      with:
+        args: >
+          --context ./frontend
+          --dockerfile ./frontend/Dockerfile
+          --destination myapp-frontend:latest
+          --insecure
+
+    # Apply Kubernetes manifests
+    - name: Deploy to Kubernetes
+      run: kubectl apply -f k8s/
