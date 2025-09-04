@@ -71,3 +71,4 @@ jobs:
         kubectl apply -f k8s/
         kubectl set image deployment/backend-deployment backend=ghcr.io/hbence0408/myapp-backend:latest
         kubectl set image deployment/frontend-deployment frontend=ghcr.io/hbence0408/myapp-frontend:latest
+        kubectl apply -f frontend-ingress.yaml
