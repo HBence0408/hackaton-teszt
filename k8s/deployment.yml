@@ -16,6 +16,8 @@ spec:
       - name: backend
         image: ghcr.io/hbence0408/myapp-backend:latest
         imagePullPolicy: Always
+      imagePullSecrets:
+      - name: ghcr-secret   # ← itt adjuk meg a secret nevét
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -35,3 +37,5 @@ spec:
       - name: frontend
         image: ghcr.io/hbence0408/myapp-frontend:latest
         imagePullPolicy: Always
+      imagePullSecrets:
+      - name: ghcr-secret   # ← ugyanaz a secret a frontendhez is
