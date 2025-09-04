@@ -1,5 +1,5 @@
 # ===============================
-# Backend Service
+# Backend Service (ClusterIP)
 # ===============================
 apiVersion: v1
 kind: Service
@@ -9,15 +9,14 @@ spec:
   selector:
     app: backend
   ports:
-    - protocol: TCP
-      port: 8080          # service port (belső)
-      targetPort: 8080    # pod port
-  type: ClusterIP        # csak klaszteren belül érhető el
+    - port: 8080
+      targetPort: 8080
+  type: ClusterIP
 
 ---
 
 # ===============================
-# Frontend Service
+# Frontend Service (NodePort)
 # ===============================
 apiVersion: v1
 kind: Service
@@ -26,10 +25,8 @@ metadata:
 spec:
   selector:
     app: frontend
+  type: NodePort
   ports:
-    - protocol: TCP
-      port: 80            # service port (belső)
-      targetPort: 80      # pod port
-      # nodePort csak akkor kell, ha helyi klaszteren NodePort-ot akarsz használni
-      # nodePort: 30828
-  type: LoadBalancer      # cloud-on publikus IP-t kap
+    - port: 80
+      targetPort: 80
+      nodePort: 30828   # fix NodePort
