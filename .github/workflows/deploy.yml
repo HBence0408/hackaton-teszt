@@ -57,7 +57,9 @@ jobs:
 
     # Deploy Deployment és Service
     - name: Deploy backend & frontend
-      run: kubectl apply -f k8s/
+      run: |
+        kubectl apply -f k8s/deployment.yml
+        kubectl apply -f k8s/service.yml
 
     # Wait for Ingress Controller
     - name: Wait for Ingress Controller
