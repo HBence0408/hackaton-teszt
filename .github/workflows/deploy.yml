@@ -51,6 +51,7 @@ jobs:
       with:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+        registry: ghcr.io
 
     # 9️⃣ Tag and push backend image
     - name: Push backend image to GHCR
