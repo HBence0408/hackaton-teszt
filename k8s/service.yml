@@ -30,5 +30,6 @@ spec:
     - protocol: TCP
       port: 80            # service port (belső)
       targetPort: 80      # pod port
-      nodePort: 30828     # fix NodePort kívülről való eléréshez
-  type: NodePort          # kívülről is elérhető a Node IP + NodePort segítségével
+      # nodePort csak akkor kell, ha helyi klaszteren NodePort-ot akarsz használni
+      # nodePort: 30828
+  type: LoadBalancer      # cloud-on publikus IP-t kap
