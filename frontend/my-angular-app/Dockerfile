@@ -30,7 +30,7 @@ RUN rm -rf /usr/share/nginx/html/*
 
 # Angular build átmásolása az Nginx html könyvtárába
 # ⚠️ Cseréld ki a <build-output> részt az angular.json outputPath-jára pl. 'my-angular-app' vagy 'browser'
-COPY --from=build /app/dist/my-angular-app/browser /usr/share/nginx/html
+COPY --from=build /app/dist/my-angular-app/ /usr/share/nginx/html
 
 # Port 80 nyitva az Nginx számára
 EXPOSE 80
