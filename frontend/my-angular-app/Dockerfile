@@ -33,7 +33,7 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY --from=build /app/dist/my-angular-app/browser /usr/share/nginx/html
 
 # Saját Nginx config másolása
-COPY ../../k8s/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY ./default.conf /etc/nginx/conf.d/default.conf
 
 # Port 80 nyitva az Nginx számára
 EXPOSE 80
