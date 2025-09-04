@@ -56,14 +56,14 @@ jobs:
     # 9️⃣ Tag and push backend image
     - name: Push backend image to GHCR
       run: |
-        docker tag myapp-backend:latest ghcr.io/${{ github.repository_owner }}/myapp-backend:latest
-        docker push ghcr.io/${{ github.repository_owner }}/myapp-backend:latest
+        docker tag myapp-backend:latest ghcr.io/hbence0408/myapp-backend:latest
+        docker push ghcr.io/hbence0408/myapp-backend:latest
 
     # 🔟 Tag and push frontend image
     - name: Push frontend image to GHCR
       run: |
-        docker tag myapp-frontend:latest ghcr.io/${{ github.repository_owner }}/myapp-frontend:latest
-        docker push ghcr.io/${{ github.repository_owner }}/myapp-frontend:latest
+        docker tag myapp-frontend:latest ghcr.io/hbence0408/myapp-frontend:latest
+        docker push ghcr.io/hbence0408/myapp-frontend:latest
 
     # 1️⃣1️⃣ Deploy to Kubernetes
     - name: Deploy to Kubernetes

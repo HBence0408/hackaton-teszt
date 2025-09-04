@@ -1,32 +1,29 @@
-# -----------------------
 # Backend Service
-# -----------------------
 apiVersion: v1
 kind: Service
 metadata:
   name: backend-service
 spec:
-  type: ClusterIP
   selector:
     app: backend
   ports:
     - protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 8080          # belső port a podon
+      targetPort: 8080
+  type: ClusterIP        # csak a klaszteren belül érhető el
 
-# -----------------------
-# Frontend Service
-# -----------------------
 ---
+
+# Frontend Service
 apiVersion: v1
 kind: Service
 metadata:
   name: frontend-service
 spec:
-  type: LoadBalancer
   selector:
     app: frontend
   ports:
     - protocol: TCP
-      port: 80
+      port: 80            # külső port, amin elérhető lesz a frontend
       targetPort: 80
+  type: NodePort          # kívülről is elérhető a Node IP + port segítségével
