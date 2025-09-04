@@ -30,7 +30,7 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 
 # Angular build átmásolása az Nginx html mappájába
-COPY --from=build /app/dist/my-angular-app /usr/share/nginx/html
+COPY --from=build ./dist/my-angular-app /usr/share/nginx/html
 
 # Port 80 nyitva
 EXPOSE 80
