@@ -58,20 +58,20 @@ jobs:
     # Deploy Deployment és Service
     - name: Deploy backend & frontend
       run: |
-        kubectl apply -f k8s/deployment.yml
+        kubectl apply -f k8s/deployment
         kubectl apply -f k8s/service.yml
 
-    # Wait for Traefik Ingress Controller
-    - name: Wait for Traefik
+    # Wait for Ingress Controller
+    - name: Wait for Ingress Controller
       run: |
-        kubectl wait --namespace kube-system \
+        kubectl wait --namespace ingress-nginx \
           --for=condition=ready pod \
-          --selector=app.kubernetes.io/name=traefik \
+          --selector=app.kubernetes.io/component=controller \
           --timeout=180s
-          
+
     # Deploy Ingress
     - name: Deploy frontend Ingress
-      run: kubectl apply -f k8s/frontend-ingress.yml
+      run: kubectl apply -f k8s/frontend-ingress.yaml
 
     # Update deployments with latest images
     - name: Update deployments with latest images
