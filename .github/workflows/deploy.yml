@@ -39,14 +39,19 @@ jobs:
 
     # 6️⃣ Build backend Docker image (local)
     - name: Build backend image
-      run: |
-        docker build ./backend -t myapp-backend:latest
+      run: docker build ./backend -t myapp-backend:latest
 
     # 7️⃣ Build frontend Docker image (local)
     - name: Build frontend image
-      run: |
-        docker build ./frontend/my-angular-app -t myapp-frontend:latest
+      run: docker build ./frontend/my-angular-app -t myapp-frontend:latest
 
-    # 8️⃣ Deploy to Kubernetes
+    # 8️⃣ Load images into Kind cluster
+    - name: Load backend image into Kind
+      run: kind load docker-image myapp-backend:latest --name my-cluster
+
+    - name: Load frontend image into Kind
+      run: kind load docker-image myapp-frontend:latest --name my-cluster
+
+    # 9️⃣ Deploy to Kubernetes
     - name: Deploy to Kubernetes
       run: kubectl apply -f k8s/
