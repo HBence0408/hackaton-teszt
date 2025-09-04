@@ -61,14 +61,14 @@ jobs:
         kubectl apply -f k8s/deployment.yml
         kubectl apply -f k8s/service.yml
 
-    # Wait for Ingress Controller
-    - name: Wait for Ingress Controller
+    # Wait for Traefik Ingress Controller
+    - name: Wait for Traefik
       run: |
-        kubectl wait --namespace ingress-nginx \
+        kubectl wait --namespace kube-system \
           --for=condition=ready pod \
-          --selector=app.kubernetes.io/component=controller \
+          --selector=app.kubernetes.io/name=traefik \
           --timeout=180s
-
+          
     # Deploy Ingress
     - name: Deploy frontend Ingress
       run: kubectl apply -f k8s/frontend-ingress.yml
