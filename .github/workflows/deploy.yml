@@ -71,7 +71,7 @@ jobs:
 
     # Deploy Ingress
     - name: Deploy frontend Ingress
-      run: kubectl apply -f k8s/frontend-ingress.yaml
+      run: kubectl apply -f k8s/frontend-ingress.yml
 
     # Update deployments with latest images
     - name: Update deployments with latest images
