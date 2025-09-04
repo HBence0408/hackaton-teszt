@@ -10,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1️⃣ Checkout repository
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # 2️⃣ Setup kubeconfig
     - name: Setup kubeconfig
       run: |
         mkdir -p $HOME/.kube
@@ -22,53 +20,59 @@ jobs:
         ${{ secrets.KUBECONFIG_DATA }}
         EOF
 
-    # 3️⃣ Setup Node.js
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '20'
 
-    # 4️⃣ Install Angular CLI
     - name: Install Angular CLI
       run: npm install -g @angular/cli
 
-    # 5️⃣ Build Angular frontend
     - name: Build Angular frontend
       working-directory: ./frontend/my-angular-app
       run: npm ci && ng build --configuration production
 
-    # 6️⃣ Build backend Docker image
-    - name: Build backend image
+    - name: Build backend Docker image
       run: docker build ./backend -t myapp-backend:latest
 
-    # 7️⃣ Build frontend Docker image
-    - name: Build frontend image
+    - name: Build frontend Docker image
       run: docker build ./frontend/my-angular-app -t myapp-frontend:latest
 
-    # 8️⃣ Log in to GitHub Container Registry (GHCR) using PAT
-    - name: Log in to GHCR (org)
+    - name: Log in to GHCR
       uses: docker/login-action@v2
       with:
         username: hbence0408
         password: ${{ secrets.GHCR_PAT }}
         registry: ghcr.io
 
-    # 9️⃣ Tag and push backend image
     - name: Push backend image to GHCR
       run: |
         docker tag myapp-backend:latest ghcr.io/hbence0408/myapp-backend:latest
         docker push ghcr.io/hbence0408/myapp-backend:latest
 
-    # 🔟 Tag and push frontend image
     - name: Push frontend image to GHCR
       run: |
         docker tag myapp-frontend:latest ghcr.io/hbence0408/myapp-frontend:latest
         docker push ghcr.io/hbence0408/myapp-frontend:latest
 
-    # 1️⃣1️⃣ Deploy to Kubernetes
-    - name: Deploy to Kubernetes
+    # Deploy Deployment és Service
+    - name: Deploy backend & frontend
+      run: kubectl apply -f k8s/
+
+    # Wait for Ingress Controller
+    - name: Wait for Ingress Controller
       run: |
-        kubectl apply -f k8s/
+        kubectl wait --namespace ingress-nginx \
+          --for=condition=ready pod \
+          --selector=app.kubernetes.io/component=controller \
+          --timeout=180s
+
+    # Deploy Ingress
+    - name: Deploy frontend Ingress
+      run: kubectl apply -f k8s/frontend-ingress.yaml
+
+    # Update deployments with latest images
+    - name: Update deployments with latest images
+      run: |
         kubectl set image deployment/backend-deployment backend=ghcr.io/hbence0408/myapp-backend:latest
         kubectl set image deployment/frontend-deployment frontend=ghcr.io/hbence0408/myapp-frontend:latest
-        kubectl apply -f frontend-ingress.yaml
