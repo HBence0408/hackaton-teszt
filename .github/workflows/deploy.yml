@@ -45,12 +45,12 @@ jobs:
     - name: Build frontend image
       run: docker build ./frontend/my-angular-app -t myapp-frontend:latest
 
-    # 8️⃣ Log in to GitHub Container Registry (GHCR)
-    - name: Log in to GHCR
+    # 8️⃣ Log in to GitHub Container Registry (GHCR) using PAT
+    - name: Log in to GHCR (org)
       uses: docker/login-action@v2
       with:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        username: hbence0408
+        password: ${{ secrets.GHCR_PAT }}
         registry: ghcr.io
 
     # 9️⃣ Tag and push backend image
