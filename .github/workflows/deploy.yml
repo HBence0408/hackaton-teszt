@@ -67,4 +67,7 @@ jobs:
 
     # 1️⃣1️⃣ Deploy to Kubernetes
     - name: Deploy to Kubernetes
-      run: kubectl apply -f k8s/
+      run: |
+        kubectl apply -f k8s/
+        kubectl set image deployment/backend-deployment backend=ghcr.io/hbence0408/myapp-backend:latest
+        kubectl set image deployment/frontend-deployment frontend=ghcr.io/hbence0408/myapp-frontend:latest
