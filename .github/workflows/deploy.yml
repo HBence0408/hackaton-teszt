@@ -45,13 +45,18 @@ jobs:
     - name: Build frontend image
       run: docker build ./frontend/my-angular-app -t myapp-frontend:latest
 
-    # 8️⃣ Load images into Kind cluster
+    # 8️⃣ Set up Kind cluster
+    - name: Set up Kind cluster
+      uses: engineerd/setup-kind@v0.6.0
+
+    # 9️⃣ Load images into Kind
     - name: Load backend image into Kind
-      run: kind load docker-image myapp-backend:latest --name my-cluster
+      run: kind load docker-image myapp-backend:latest --name kind
 
     - name: Load frontend image into Kind
-      run: kind load docker-image myapp-frontend:latest --name my-cluster
+      run: kind load docker-image myapp-frontend:latest --name kind
 
-    # 9️⃣ Deploy to Kubernetes
+    # 🔟 Deploy to Kubernetes
     - name: Deploy to Kubernetes
       run: kubectl apply -f k8s/
+      
