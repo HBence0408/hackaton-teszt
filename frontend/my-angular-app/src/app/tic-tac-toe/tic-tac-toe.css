@@ -1,0 +1,12 @@
+.square-btn{
+    height: 100%;
+    width: 100%;
+    font-size: 20px;
+    border: 4px solid black;
+}
+
+.reset{
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

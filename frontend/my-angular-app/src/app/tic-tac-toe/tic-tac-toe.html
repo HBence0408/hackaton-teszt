@@ -1,0 +1,13 @@
+<div style="width: 200px; height: 200px;">
+
+<mat-grid-list cols = "3" rowHeight="1:1">
+
+ @for(n of buttons; track n) {
+    <mat-grid-tile >
+         <button  (click)="put(n.id)" id="{{n.id}}" mat-raised-button color = {{n.color}} class="square-btn">{{n.label}}</button>    
+    </mat-grid-tile>
+ }
+
+</mat-grid-list>
+<button class="reset" (click)="reset()"  mat-flat-button color="warn" >reset</button>
+</div>
