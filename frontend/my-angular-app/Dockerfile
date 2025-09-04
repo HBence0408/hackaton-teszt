@@ -13,6 +13,9 @@ RUN npm ci
 # Angular CLI telepítése globálisan
 RUN npm install -g @angular/cli
 
+#angular matarial hozzáadás
+RUN  ng add @angular/material
+
 # Teljes frontend forrás másolása
 COPY . .
 
