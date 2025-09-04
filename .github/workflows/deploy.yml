@@ -45,7 +45,7 @@ jobs:
     # 7️⃣ Build frontend Docker image (local)
     - name: Build frontend image
       run: |
-        docker build ./frontend -t myapp-frontend:latest
+        docker build ./frontend/my-angular-app -t myapp-frontend:latest
 
     # 8️⃣ Deploy to Kubernetes
     - name: Deploy to Kubernetes
